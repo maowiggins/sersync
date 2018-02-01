@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<head version="2.5">
+    <host hostip="10.0.9.233" port="874"></host>
+    <debug start="false"/>
+    <fileSystem xfs="false"/>
+    <filter start="false">
+	<exclude expression="(.*)\.svn"></exclude>
+	<exclude expression="(.*)\.gz"></exclude>
+    </filter>
+    <inotify>
+	<delete start="true"/>
+	<createFolder start="true"/>
+	<createFile start="false"/>
+	<closeWrite start="true"/>
+	<moveFrom start="true"/>
+	<moveTo start="true"/>
+	<attrib start="false"/>
+	<modify start="true"/>
+    </inotify>
+
+    <sersync>
+	<localpath watch="/opt/nginx">
+	    <remote ip="10.0.9.233" name="nginx"/>
+	</localpath>
+	<rsync>
+	    <commonParams params="-artuz"/>
+	    <auth start="true" users="rsync" passwordfile="/etc/rsync.pas"/>
+	    <userDefinedPort start="true" port="874"/><!-- port=874 -->
+	    <timeout start="false" time="100"/><!-- timeout=100 -->
+	    <ssh start="false"/>
+	</rsync>
+	<failLog path="/tmp/rsync_fail_log.sh" timeToExecute="60"/><!--default every 60mins execute once-->
+	<crontab start="false" schedule="600"><!--600mins-->
+	    <crontabfilter start="false">
+		<exclude expression="*.php"></exclude>
+		<exclude expression="info/*"></exclude>
+	    </crontabfilter>
+	</crontab>
+	<plugin start="false" name="command"/>
+    </sersync>
+</head>
